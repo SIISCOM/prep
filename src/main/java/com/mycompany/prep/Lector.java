@@ -6,17 +6,11 @@ package com.mycompany.prep;
 
 import com.mycompany.prep.BD.conexion;
 import de.milchreis.uibooster.UiBooster;
-import java.beans.Statement;
-import java.sql.Date;
+import de.milchreis.uibooster.model.UiBoosterOptions;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.Normalizer.Form;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -185,47 +179,62 @@ public class Lector extends javax.swing.JFrame {
     }//GEN-LAST:event_folioKeyPressed
 
     private void folioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_folioActionPerformed
+      
+        UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
         conexion conn = new conexion();
-        try  {
-
-            String usuario = folio.getText();
-
-            conn.ConectarBasedeDatos();
-
-            String sql = "select * from invitados where folio='"+usuario+"' ";
-
-            java.sql.Statement sentencias=conn.getConnection().createStatement();
+   try  {
+       String usuario = folio.getText().replace("'","-");
+       folio.setText(usuario);
+    
+       conn.ConectarBasedeDatos();
+       String sql = "select * from invitados where folio='"+usuario+"' ";
+       
+         java.sql.Statement sentencias=conn.getConnection().createStatement();
             ResultSet resultado=sentencias.executeQuery(sql);
-            if (resultado.next()) {
-                JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
-                    "Confirmado", JOptionPane.INFORMATION_MESSAGE);
-                conn.DesconectarBasedeDatos();
-                folio.setText("");
-
-            } else{
-                UiBooster booster = new UiBooster();
-                de.milchreis.uibooster.model.Form form = booster.createForm("Informacion Invitado")
-                .addText("Nombre")
-                .addText("Direccion")
-                .addText("Telefono")
-                //            .addTextArea("Tell me something about you")
-                //            .addSelection(
-                    //                    "Whats your favorite movie?",
-                    //                    Arrays.asList("Pulp Fiction", "Bambi", "The Godfather", "Hangover"))
-                //            .addLabel("Choose an action")
-                //            .addButton("half full", () -> booster.showInfoDialog("Optimist"))
-                //            .addButton("half empty", () -> booster.showInfoDialog("Pessimist"))
-                //            .addSlider("How many liters did you drink today?", 0, 5, 1, 5, 1)
-                .show();
-
-                folio.setText("");
-
-            }
-
-        } catch(SQLException ex){conn.DesconectarBasedeDatos(); JOptionPane.showMessageDialog(this, "Error: "+ex);  }
-
+       if (resultado.next()) {
+JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
+                "Confirmado", JOptionPane.INFORMATION_MESSAGE);
+           conn.DesconectarBasedeDatos();
+           folio.setText("");
+           
+       } else{ //si no llenas el formulario
+//   formulario();
+      booster.showErrorDialog("dddd", "dddd");
+       }
+        } catch(SQLException ex){conn.DesconectarBasedeDatos();  booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");  }
+   
     }//GEN-LAST:event_folioActionPerformed
 
+    
+    
+     public void formulario() throws SQLException
+    {
+    
+     UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
+     conexion conn = new conexion();
+     de.milchreis.uibooster.model.Form form = booster.createForm("Informacion Invitado")
+            .addText("Nombre").setID("1")
+            .addText("Direccion").setID("2")
+            .addText("Telefono").setID("3")
+            .show(); 
+           if (form.getById("1").asString()!="" && form.getById("2").asString()!="" && form.getById("3").asString()!=""){              
+                conn.ConectarBasedeDatos();
+               String sql = "INSERT INTO invitados(folio,nombre,direccion,telefono) " + "VALUES ('"+folio.getText().trim()+"','"+form.getById("1").asString().toUpperCase().trim()+"', '"+form.getById("2").asString().toUpperCase().trim()+"', '"+form.getById("3").asString().toUpperCase().trim()+"')";
+              java.sql.Statement  sentencias=conn.getConnection().createStatement();
+                int conf=sentencias.executeUpdate(sql);
+                if (conf==1) {
+                    booster.showInfoDialog("Registrado con exito");
+                    conn.DesconectarBasedeDatos();
+                    folio.setText("");
+               }
+                else{  booster.showErrorDialog("Error message: ", "ERROR");folio.setText("");conn.DesconectarBasedeDatos();}
+           }
+           else{
+               conn.DesconectarBasedeDatos();
+                booster.showErrorDialog("Todos los campos deben estar llenos", "ERROR");
+                formulario();
+           }
+    }
     private void headerPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerPanelMousePressed
         xMouse = evt.getX();
         yMouse = evt.getY();
