@@ -111,16 +111,18 @@ JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")
            
        } else{
      UiBooster booster = new UiBooster();
-           de.milchreis.uibooster.model.Form form = booster.createForm("Personal information")
-            .addText("Whats your first name?")
-            .addTextArea("Tell me something about you")
-            .addSelection(
-                    "Whats your favorite movie?",
-                    Arrays.asList("Pulp Fiction", "Bambi", "The Godfather", "Hangover"))
-            .addLabel("Choose an action")
-            .addButton("half full", () -> booster.showInfoDialog("Optimist"))
-            .addButton("half empty", () -> booster.showInfoDialog("Pessimist"))
-            .addSlider("How many liters did you drink today?", 0, 5, 1, 5, 1)
+           de.milchreis.uibooster.model.Form form = booster.createForm("Informacion Invitado")
+            .addText("Nombre")
+            .addText("Direccion")
+            .addText("Telefono")
+//            .addTextArea("Tell me something about you")
+//            .addSelection(
+//                    "Whats your favorite movie?",
+//                    Arrays.asList("Pulp Fiction", "Bambi", "The Godfather", "Hangover"))
+//            .addLabel("Choose an action")
+//            .addButton("half full", () -> booster.showInfoDialog("Optimist"))
+//            .addButton("half empty", () -> booster.showInfoDialog("Pessimist"))
+//            .addSlider("How many liters did you drink today?", 0, 5, 1, 5, 1)
         .show();
            
            folio.setText("");
