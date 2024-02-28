@@ -5,13 +5,16 @@
 package com.mycompany.prep;
 
 import com.mycompany.prep.BD.conexion;
+import de.milchreis.uibooster.UiBooster;
 import java.beans.Statement;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer.Form;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -107,8 +110,21 @@ JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")
            folio.setText("");
            
        } else{
-           JOptionPane.showMessageDialog(null, "Error: Usuario o contraseña incorrectos",
-                "Alerta de Error", JOptionPane.INFORMATION_MESSAGE);
+     UiBooster booster = new UiBooster();
+           de.milchreis.uibooster.model.Form form = booster.createForm("Personal information")
+            .addText("Whats your first name?")
+            .addTextArea("Tell me something about you")
+            .addSelection(
+                    "Whats your favorite movie?",
+                    Arrays.asList("Pulp Fiction", "Bambi", "The Godfather", "Hangover"))
+            .addLabel("Choose an action")
+            .addButton("half full", () -> booster.showInfoDialog("Optimist"))
+            .addButton("half empty", () -> booster.showInfoDialog("Pessimist"))
+            .addSlider("How many liters did you drink today?", 0, 5, 1, 5, 1)
+        .show();
+           
+           folio.setText("");
+
        }
             
             
