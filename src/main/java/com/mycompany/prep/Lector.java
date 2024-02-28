@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
  * @author Jafet
  */
 public class Lector extends javax.swing.JFrame {
-
+    int xMouse, yMouse;
     /**
      * Creates new form ASISTEENCIA
      */
@@ -41,12 +41,39 @@ public class Lector extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        folio = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        folio = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        header = new javax.swing.JPanel();
+        close = new javax.swing.JLabel();
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLocationByPlatform(true);
+        setUndecorated(true);
+        setResizable(false);
 
+        jPanel1.setBackground(new java.awt.Color(0, 188, 242));
+        jPanel1.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(483, 272));
+
+        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel3.setText("Código");
+
+        folio.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         folio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 folioActionPerformed(evt);
@@ -58,32 +85,99 @@ public class Lector extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Codigo");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(folio, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(folio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(163, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 270, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        header.setBackground(new java.awt.Color(255, 255, 255));
+        header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                headerMouseDragged(evt);
+            }
+        });
+        header.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                headerMousePressed(evt);
+            }
+        });
+
+        close.setBackground(new java.awt.Color(204, 0, 0));
+        close.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        close.setForeground(new java.awt.Color(255, 255, 255));
+        close.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        close.setText("X");
+        close.setOpaque(true);
+        close.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
+        header.setLayout(headerLayout);
+        headerLayout.setHorizontalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(close, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        headerLayout.setVerticalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(close, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(121, 121, 121)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(jLabel3))
-                    .addComponent(folio, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(jLabel3)
-                .addGap(14, 14, 14)
-                .addComponent(folio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(69, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void folioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_folioKeyPressed
@@ -91,49 +185,61 @@ public class Lector extends javax.swing.JFrame {
     }//GEN-LAST:event_folioKeyPressed
 
     private void folioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_folioActionPerformed
-         conexion conn = new conexion();
-   try  {
-     
-       
-       String usuario = folio.getText();
-   
-       conn.ConectarBasedeDatos();
-       
-       String sql = "select * from invitados where folio='"+usuario+"' ";
-       
-         java.sql.Statement sentencias=conn.getConnection().createStatement();
-            ResultSet resultado=sentencias.executeQuery(sql);
-       if (resultado.next()) {
-JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
-                "Confirmado", JOptionPane.INFORMATION_MESSAGE);
-           conn.DesconectarBasedeDatos();
-           folio.setText("");
-           
-       } else{
-     UiBooster booster = new UiBooster();
-           de.milchreis.uibooster.model.Form form = booster.createForm("Informacion Invitado")
-            .addText("Nombre")
-            .addText("Direccion")
-            .addText("Telefono")
-//            .addTextArea("Tell me something about you")
-//            .addSelection(
-//                    "Whats your favorite movie?",
-//                    Arrays.asList("Pulp Fiction", "Bambi", "The Godfather", "Hangover"))
-//            .addLabel("Choose an action")
-//            .addButton("half full", () -> booster.showInfoDialog("Optimist"))
-//            .addButton("half empty", () -> booster.showInfoDialog("Pessimist"))
-//            .addSlider("How many liters did you drink today?", 0, 5, 1, 5, 1)
-        .show();
-           
-           folio.setText("");
+        conexion conn = new conexion();
+        try  {
 
-       }
-            
-            
-            
+            String usuario = folio.getText();
+
+            conn.ConectarBasedeDatos();
+
+            String sql = "select * from invitados where folio='"+usuario+"' ";
+
+            java.sql.Statement sentencias=conn.getConnection().createStatement();
+            ResultSet resultado=sentencias.executeQuery(sql);
+            if (resultado.next()) {
+                JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
+                    "Confirmado", JOptionPane.INFORMATION_MESSAGE);
+                conn.DesconectarBasedeDatos();
+                folio.setText("");
+
+            } else{
+                UiBooster booster = new UiBooster();
+                de.milchreis.uibooster.model.Form form = booster.createForm("Informacion Invitado")
+                .addText("Nombre")
+                .addText("Direccion")
+                .addText("Telefono")
+                //            .addTextArea("Tell me something about you")
+                //            .addSelection(
+                    //                    "Whats your favorite movie?",
+                    //                    Arrays.asList("Pulp Fiction", "Bambi", "The Godfather", "Hangover"))
+                //            .addLabel("Choose an action")
+                //            .addButton("half full", () -> booster.showInfoDialog("Optimist"))
+                //            .addButton("half empty", () -> booster.showInfoDialog("Pessimist"))
+                //            .addSlider("How many liters did you drink today?", 0, 5, 1, 5, 1)
+                .show();
+
+                folio.setText("");
+
+            }
+
         } catch(SQLException ex){conn.DesconectarBasedeDatos(); JOptionPane.showMessageDialog(this, "Error: "+ex);  }
-   
+
     }//GEN-LAST:event_folioActionPerformed
+
+    private void headerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+    }//GEN-LAST:event_headerMousePressed
+
+    private void headerMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - xMouse, y - yMouse);
+    }//GEN-LAST:event_headerMouseDragged
+
+    private void closeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_closeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -172,8 +278,12 @@ JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel close;
     private javax.swing.JTextField folio;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
 }
