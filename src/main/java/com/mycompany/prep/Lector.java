@@ -7,9 +7,17 @@ package com.mycompany.prep;
 import com.mycompany.prep.BD.conexion;
 import de.milchreis.uibooster.UiBooster;
 import de.milchreis.uibooster.model.UiBoosterOptions;
+import java.awt.Image;
+import java.sql.Date;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
 
@@ -22,6 +30,9 @@ public class Lector extends javax.swing.JFrame {
     /**
      * Creates new form ASISTEENCIA
      */
+    public static final Locale LOCALE_MX = new Locale("es", "MX");
+    
+  public  UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
     public Lector() {
         initComponents();
     }
@@ -41,7 +52,8 @@ public class Lector extends javax.swing.JFrame {
         codePanel = new javax.swing.JPanel();
         codeLabel = new javax.swing.JLabel();
         folio = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        labelicono = new javax.swing.JLabel();
+        dataaltaButton = new javax.swing.JLabel();
         dataPanel = new javax.swing.JPanel();
         dataNombre = new javax.swing.JLabel();
         dataDireccion = new javax.swing.JLabel();
@@ -94,18 +106,32 @@ public class Lector extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("jLabel3");
+        dataaltaButton.setBackground(new java.awt.Color(255, 255, 255));
+        dataaltaButton.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        dataaltaButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        dataaltaButton.setText("Alta Sin Código");
+        dataaltaButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(204, 204, 204), new java.awt.Color(204, 204, 204), null, null));
+        dataaltaButton.setOpaque(true);
+        dataaltaButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dataaltaButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout codePanelLayout = new javax.swing.GroupLayout(codePanel);
         codePanel.setLayout(codePanelLayout);
         codePanelLayout.setHorizontalGroup(
             codePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, codePanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelicono, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
             .addGroup(codePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(codePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(folio, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(codeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(codeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dataaltaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         codePanelLayout.setVerticalGroup(
@@ -116,25 +142,21 @@ public class Lector extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(folio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(dataaltaButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(labelicono, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
         );
 
         dataPanel.setBackground(new java.awt.Color(255, 255, 255));
 
-        dataNombre.setText("Nombre");
         dataNombre.setPreferredSize(new java.awt.Dimension(30, 16));
-
-        dataDireccion.setText("Esta es mi direccion");
-
-        dataTelefono.setText("6131135789");
-
-        dataPromotor.setText("Daniel osuna cardenas");
 
         dataTitle.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         dataTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         dataTitle.setText("INFORMACIÓN DEL INVITADO");
 
+        dataListaButton.setBackground(new java.awt.Color(255, 255, 255));
         dataListaButton.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         dataListaButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         dataListaButton.setText("Lista De Asistencia");
@@ -257,7 +279,7 @@ public class Lector extends javax.swing.JFrame {
 
     private void folioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_folioActionPerformed
       
-        UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
+//        UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
         conexion conn = new conexion();
    try  {
        String usuario = folio.getText().replace("'","-");
@@ -268,48 +290,147 @@ public class Lector extends javax.swing.JFrame {
        
          java.sql.Statement sentencias=conn.getConnection().createStatement();
             ResultSet resultado=sentencias.executeQuery(sql);
+            
        if (resultado.next()) {
-JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
-                "Confirmado", JOptionPane.INFORMATION_MESSAGE);
+           int res = registroasistencia(usuario);        
+           if (res==1) {
+                 // Se encontro el codigo de barras
+           dataNombre.setText(resultado.getString("nombre"));
+           dataDireccion.setText(resultado.getString("direccion"));
+           dataTelefono.setText(resultado.getString("telefono"));
+           dataPromotor.setText(resultado.getString("promotor"));
+   
+//           // Import ImageIcon     
+//           ImageIcon iconLogo = new ImageIcon("src/main/java/resources/fec.png");
+//           // In init() method write this code
+//           labelicono.setIcon(iconLogo);
+          ImageIcon imageIcon = new ImageIcon(new ImageIcon("src/main/java/resources/fec.png").getImage().getScaledInstance(labelicono.getWidth(), labelicono.getHeight(), Image.SCALE_DEFAULT));
+          labelicono.setIcon(imageIcon);
+//JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
+//                "Confirmado", JOptionPane.INFORMATION_MESSAGE);
            conn.DesconectarBasedeDatos();
            folio.setText("");
            
-       } else{ //si no llenas el formulario
-//   formulario();
-      booster.showErrorDialog("dddd", "dddd");
+           }else{
+               
+                 booster.showErrorDialog("Su asistencia ya se encuentra registrada", "ERROR");
+                 folio.setText("");
+                  dataNombre.setText("");
+                  dataDireccion.setText("");
+                  dataTelefono.setText("");
+                  dataPromotor.setText("");
+           }
+                    
+         
+       } else{ //si no se encuentra te abre el formulario
+           
+       formulario();
+ 
        }
-        } catch(SQLException ex){conn.DesconectarBasedeDatos();  booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");  }
+        } catch(SQLException ex){
+            conn.DesconectarBasedeDatos();
+            booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
+        }
    
     }//GEN-LAST:event_folioActionPerformed
+  public static String dateFormatter(String inputFormat, String outputFormat, String inputDate){
+      //Define formato default de entrada.   
+      String input = inputFormat.isEmpty()? "yyyy-MM-dd hh:mm:ss" : inputFormat; 
+//            String input =  inputFormat; 
 
-    
+      //Define formato default de salida.
+      String output = outputFormat.isEmpty()? "d 'de' MMMM 'del' yyyy" : outputFormat;
+    String outputDate = inputDate;
+    try {
+        outputDate = new SimpleDateFormat(output, LOCALE_MX).format(new SimpleDateFormat(input, LOCALE_MX).parse(inputDate));
+    } catch (Exception e) {
+        System.out.println("dateFormatter(): " + e.getMessage());           
+    }
+    return outputDate;
+}
+    public int registroasistencia(String folio) throws SQLException
+    {
+        
+         try {
+       conexion conn = new conexion();
+       conn.ConectarBasedeDatos();
+       String sql = "select * from registro where folio='"+folio+"' ";      
+       java.sql.Statement sentencias=conn.getConnection().createStatement();
+       ResultSet resultado=sentencias.executeQuery(sql);
+       if (resultado.next()) {
+                    return 0;
+       }
+       else
+       {
+       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+       dateFormatter("yyyy-MM-dd hh:mm:ss","d 'de' MMMM 'del' yyyy",dtf.format(LocalDateTime.now()));
+       sql = "INSERT INTO registro(folio,fecha) " + "VALUES ('"+folio.trim()+"','" + (dateFormatter("yyyy-MM-dd hh:mm:ss","d 'de' MMMM 'del' yyyy",dtf.format(LocalDateTime.now())))+"')";
+           System.out.println(sql);
+       sentencias=conn.getConnection().createStatement();
+       int conf=sentencias.executeUpdate(sql);
+       return conf;
+
+       }
+         } catch (SQLException ex) {
+             booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
+          return 0;      
+    }
+       
+       
+        
+    }
     
      public void formulario() throws SQLException
     {
     
-     UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
+//     UiBooster booster = new UiBooster((UiBoosterOptions.Theme.SWING));
      conexion conn = new conexion();
      de.milchreis.uibooster.model.Form form = booster.createForm("Informacion Invitado")
             .addText("Nombre").setID("1")
             .addText("Direccion").setID("2")
             .addText("Telefono").setID("3")
             .show(); 
-           if (form.getById("1").asString()!="" && form.getById("2").asString()!="" && form.getById("3").asString()!=""){              
+    
+           if ((form.getById("1").asString().length()> 0) && (form.getById("2").asString().length()> 0 )&& (form.getById("3").asString().length()> 0)){                  
                 conn.ConectarBasedeDatos();
-               String sql = "INSERT INTO invitados(folio,nombre,direccion,telefono) " + "VALUES ('"+folio.getText().trim()+"','"+form.getById("1").asString().toUpperCase().trim()+"', '"+form.getById("2").asString().toUpperCase().trim()+"', '"+form.getById("3").asString().toUpperCase().trim()+"')";
-              java.sql.Statement  sentencias=conn.getConnection().createStatement();
+                String sql = "INSERT INTO invitados(folio,nombre,direccion,telefono) " + "VALUES ('"+folio.getText().trim()+"','"+form.getById("1").asString().toUpperCase().trim()+"', '"+form.getById("2").asString().toUpperCase().trim()+"', '"+form.getById("3").asString().toUpperCase().trim()+"')";
+                java.sql.Statement  sentencias=conn.getConnection().createStatement();
                 int conf=sentencias.executeUpdate(sql);
-                if (conf==1) {
-                    booster.showInfoDialog("Registrado con exito");
-                    conn.DesconectarBasedeDatos();
-                    folio.setText("");
-               }
-                else{  booster.showErrorDialog("Error message: ", "ERROR");folio.setText("");conn.DesconectarBasedeDatos();}
+                
+                
+                    if (conf==1) {
+                        int res=  registroasistencia(folio.getText());
+                        if (res==1) {
+                         booster.showInfoDialog("Registrado con exito");
+                        conn.DesconectarBasedeDatos();
+                        folio.setText("");
+                        }
+                       
+                       }
+                    else{
+                        booster.showErrorDialog("Error message: No se realizo la insercion en SQL ", "ERROR");folio.setText("");
+                        conn.DesconectarBasedeDatos();
+                  folio.setText("");
+                  dataNombre.setText("");
+                  dataDireccion.setText("");
+                  dataTelefono.setText("");
+                  dataPromotor.setText("");
+                        
+                        }
            }
            else{
                conn.DesconectarBasedeDatos();
-                booster.showErrorDialog("Todos los campos deben estar llenos", "ERROR");
-                formulario();
+                final boolean isConfirmed = booster.showConfirmDialog("¿Todos los campos deben estar llenos, desea continuar con el formulario?", "ERROR");
+               if (isConfirmed) {
+                   formulario();
+               } else {
+                   folio.setText("");
+                  dataNombre.setText("");
+                  dataDireccion.setText("");
+                  dataTelefono.setText("");
+                  dataPromotor.setText("");
+                      }
+                
            }
     }
     private void headerPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerPanelMousePressed
@@ -326,6 +447,10 @@ JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")
     private void closeActionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeActionMouseClicked
         System.exit(0);
     }//GEN-LAST:event_closeActionMouseClicked
+
+    private void dataaltaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataaltaButtonMouseClicked
+        
+    }//GEN-LAST:event_dataaltaButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -374,12 +499,13 @@ JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")
     private javax.swing.JLabel dataPromotor;
     private javax.swing.JLabel dataTelefono;
     private javax.swing.JLabel dataTitle;
+    private javax.swing.JLabel dataaltaButton;
     private javax.swing.JTextField folio;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel labelicono;
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
 }
