@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -122,17 +124,17 @@ public class Lector extends javax.swing.JFrame {
         codePanel.setLayout(codePanelLayout);
         codePanelLayout.setHorizontalGroup(
             codePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, codePanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelicono, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
             .addGroup(codePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(codePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(folio, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                    .addComponent(folio)
                     .addComponent(codeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dataaltaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(codePanelLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(labelicono, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(85, Short.MAX_VALUE))
         );
         codePanelLayout.setVerticalGroup(
             codePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,9 +145,9 @@ public class Lector extends javax.swing.JFrame {
                 .addComponent(folio, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(dataaltaButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                .addGap(28, 28, 28)
-                .addComponent(labelicono, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+                .addGap(18, 18, 18)
+                .addComponent(labelicono, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12))
         );
 
         dataPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -159,8 +161,13 @@ public class Lector extends javax.swing.JFrame {
         dataListaButton.setBackground(new java.awt.Color(255, 255, 255));
         dataListaButton.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         dataListaButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        dataListaButton.setText("Lista De Asistencia");
+        dataListaButton.setText("Buscar persona");
         dataListaButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(204, 204, 204), new java.awt.Color(204, 204, 204), null, null));
+        dataListaButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dataListaButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout dataPanelLayout = new javax.swing.GroupLayout(dataPanel);
         dataPanel.setLayout(dataPanelLayout);
@@ -286,7 +293,7 @@ public class Lector extends javax.swing.JFrame {
        folio.setText(usuario);
     
        conn.ConectarBasedeDatos();
-       String sql = "select * from invitados where folio='"+usuario+"' ";
+       String sql = "select * from invitados where folio='"+usuario+"'   ";
        
          java.sql.Statement sentencias=conn.getConnection().createStatement();
             ResultSet resultado=sentencias.executeQuery(sql);
@@ -319,6 +326,8 @@ public class Lector extends javax.swing.JFrame {
                   dataDireccion.setText("");
                   dataTelefono.setText("");
                   dataPromotor.setText("");
+                  ImageIcon imageIcon = new ImageIcon(new ImageIcon("src/main/java/resources/barcode.png").getImage().getScaledInstance(labelicono.getWidth(), labelicono.getHeight(), Image.SCALE_DEFAULT));
+                  labelicono.setIcon(imageIcon);
            }
                     
          
@@ -399,8 +408,16 @@ public class Lector extends javax.swing.JFrame {
                 
                 
                     if (conf==1) {
+                        
+                        
                         int res=  registroasistencia(folio.getText());
                         if (res==1) {
+                          
+                            
+                            
+                            
+                            
+  
                          booster.showInfoDialog("Registrado con exito");
                         conn.DesconectarBasedeDatos();
                         folio.setText("");
@@ -415,6 +432,8 @@ public class Lector extends javax.swing.JFrame {
                   dataDireccion.setText("");
                   dataTelefono.setText("");
                   dataPromotor.setText("");
+                  ImageIcon imageIcon = new ImageIcon(new ImageIcon("src/main/java/resources/barcode.png").getImage().getScaledInstance(labelicono.getWidth(), labelicono.getHeight(), Image.SCALE_DEFAULT));
+                  labelicono.setIcon(imageIcon);
                         
                         }
            }
@@ -424,11 +443,13 @@ public class Lector extends javax.swing.JFrame {
                if (isConfirmed) {
                    formulario();
                } else {
-                   folio.setText("");
+                  folio.setText("");
                   dataNombre.setText("");
                   dataDireccion.setText("");
                   dataTelefono.setText("");
                   dataPromotor.setText("");
+                  ImageIcon imageIcon = new ImageIcon(new ImageIcon("src/main/java/resources/barcode.png").getImage().getScaledInstance(labelicono.getWidth(), labelicono.getHeight(), Image.SCALE_DEFAULT));
+                  labelicono.setIcon(imageIcon);
                       }
                 
            }
@@ -447,10 +468,77 @@ public class Lector extends javax.swing.JFrame {
     private void closeActionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeActionMouseClicked
         System.exit(0);
     }//GEN-LAST:event_closeActionMouseClicked
+public String generarfolio()
+{
+         conexion conn = new conexion();
+   try  {
+      
+       conn.ConectarBasedeDatos();
+             String nv;
+       String sql = "select * from invitados WHERE nombre LIKE '%nv%' order by id";      
+       java.sql.Statement sentencias=conn.getConnection().createStatement();
+       ResultSet resultado=sentencias.executeQuery(sql);
+           
+       if (resultado.next()) {
+          String folant= resultado.getString("folio");   
+          folant.substring(2);
+          int numfolio=Integer.valueOf(folant);
+          numfolio++;
+          return ""+numfolio ;
+       }
+       else{
+           return "0";
+       }
+   }  catch(SQLException ex){
+            conn.DesconectarBasedeDatos();
+            booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
+            return null;
+        }
+}
+public boolean verificarfolio(String fol)
+{
+   
+        conexion conn = new conexion();
+   try  {
+      
+       conn.ConectarBasedeDatos();
+       String sql = "select * from invitados WHERE nombre LIKE '%"+fol+"%'   ";      
+       java.sql.Statement sentencias=conn.getConnection().createStatement();
+       ResultSet resultado=sentencias.executeQuery(sql);
+           
+       if (resultado.next()) {
+        return false;
+       }
+       else{
+           return true;
+       }
+   }  catch(SQLException ex){
+            conn.DesconectarBasedeDatos();
+            booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
+            return false;
+        }
+    
+    
 
+}
     private void dataaltaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataaltaButtonMouseClicked
-        
+        try { 
+            //generar folio de no se donde
+            String num =generarfolio();
+
+            folio.setText("nv"+num);           
+            formulario();
+        } catch (SQLException ex) {
+             booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
+        }
     }//GEN-LAST:event_dataaltaButtonMouseClicked
+
+    private void dataListaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataListaButtonMouseClicked
+      busqueda alt = new busqueda();
+       alt.setVisible(true);
+       alt.toFront();
+       this.dispose();
+    }//GEN-LAST:event_dataListaButtonMouseClicked
 
     /**
      * @param args the command line arguments
