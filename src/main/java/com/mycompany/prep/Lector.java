@@ -306,20 +306,14 @@ public class Lector extends javax.swing.JFrame {
            dataDireccion.setText(resultado.getString("direccion"));
            dataTelefono.setText(resultado.getString("telefono"));
            dataPromotor.setText(resultado.getString("promotor"));
-   
-//           // Import ImageIcon     
-//           ImageIcon iconLogo = new ImageIcon("src/main/java/resources/fec.png");
-//           // In init() method write this code
-//           labelicono.setIcon(iconLogo);
+ 
           ImageIcon imageIcon = new ImageIcon(new ImageIcon("src/main/java/resources/fec.png").getImage().getScaledInstance(labelicono.getWidth(), labelicono.getHeight(), Image.SCALE_DEFAULT));
           labelicono.setIcon(imageIcon);
-//JOptionPane.showMessageDialog(null, "Bienvenido: "+resultado.getString("nombre")+ " Asistencia Confirmada"  ,
-//                "Confirmado", JOptionPane.INFORMATION_MESSAGE);
            conn.DesconectarBasedeDatos();
            folio.setText("");
            
-           }else{
-               
+           }
+           else{               
                  booster.showErrorDialog("Su asistencia ya se encuentra registrada", "ERROR");
                  folio.setText("");
                   dataNombre.setText("");
@@ -377,8 +371,8 @@ public class Lector extends javax.swing.JFrame {
            System.out.println(sql);
        sentencias=conn.getConnection().createStatement();
        int conf=sentencias.executeUpdate(sql);
+           System.out.println("sql desde registroasistencia"+conf);
        return conf;
-
        }
          } catch (SQLException ex) {
              booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
@@ -400,7 +394,7 @@ public class Lector extends javax.swing.JFrame {
             .addText("Telefono").setID("3")
             .show(); 
     
-           if ((form.getById("1").asString().length()> 0) && (form.getById("2").asString().length()> 0 )&& (form.getById("3").asString().length()> 0)){                  
+           if ((form.getById("1").asString().length()> 0) && (form.getById("2").asString().length()> 0 )&& (form.getById("3").asString().length()> 0) && verificarfolio(folio.getText() )){                  
                 conn.ConectarBasedeDatos();
                 String sql = "INSERT INTO invitados(folio,nombre,direccion,telefono) " + "VALUES ('"+folio.getText().trim()+"','"+form.getById("1").asString().toUpperCase().trim()+"', '"+form.getById("2").asString().toUpperCase().trim()+"', '"+form.getById("3").asString().toUpperCase().trim()+"')";
                 java.sql.Statement  sentencias=conn.getConnection().createStatement();
@@ -408,16 +402,9 @@ public class Lector extends javax.swing.JFrame {
                 
                 
                     if (conf==1) {
-                        
-                        
-                        int res=  registroasistencia(folio.getText());
+                                               
+                        int res= registroasistencia(folio.getText());
                         if (res==1) {
-                          
-                            
-                            
-                            
-                            
-  
                          booster.showInfoDialog("Registrado con exito");
                         conn.DesconectarBasedeDatos();
                         folio.setText("");
@@ -438,6 +425,7 @@ public class Lector extends javax.swing.JFrame {
                         }
            }
            else{
+               
                conn.DesconectarBasedeDatos();
                 final boolean isConfirmed = booster.showConfirmDialog("¿Todos los campos deben estar llenos, desea continuar con el formulario?", "ERROR");
                if (isConfirmed) {
@@ -474,17 +462,19 @@ public String generarfolio()
    try  {
       
        conn.ConectarBasedeDatos();
-             String nv;
-       String sql = "select * from invitados WHERE nombre LIKE '%nv%' order by id";      
+       String sql = "select * from invitados WHERE folio LIKE '%nv%' order by id DESC";      
        java.sql.Statement sentencias=conn.getConnection().createStatement();
        ResultSet resultado=sentencias.executeQuery(sql);
            
        if (resultado.next()) {
           String folant= resultado.getString("folio");   
-          folant.substring(2);
-          int numfolio=Integer.valueOf(folant);
+         
+          System.out.println( folant.substring(2));
+          int numfolio=Integer.parseInt( folant.substring(2));
           numfolio++;
+          
           return ""+numfolio ;
+           
        }
        else{
            return "0";
@@ -507,14 +497,20 @@ public boolean verificarfolio(String fol)
        ResultSet resultado=sentencias.executeQuery(sql);
            
        if (resultado.next()) {
+           conn.DesconectarBasedeDatos();
+           System.out.println("se repite");
         return false;
+        
        }
        else{
+           conn.DesconectarBasedeDatos();
+           System.out.println("no se repite");
            return true;
        }
    }  catch(SQLException ex){
             conn.DesconectarBasedeDatos();
-            booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
+            booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");System.out.println("error sql");
+            
             return false;
         }
     
@@ -525,8 +521,11 @@ public boolean verificarfolio(String fol)
         try { 
             //generar folio de no se donde
             String num =generarfolio();
-
-            folio.setText("nv"+num);           
+            System.out.println(""+num);
+            if (num=="0") {
+                folio.setText("nv"+1);  
+            }else{ folio.setText("nv"+num);           }
+           
             formulario();
         } catch (SQLException ex) {
              booster.showErrorDialog("Error message: "+ex.toString(), "ERROR");
