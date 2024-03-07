@@ -11,7 +11,10 @@
         <directory>src\main\java\resources</directory>        
       </resource>
     </resources>
-    
+        
+        
+        
+        
         <finalName>prep</finalName>
         <plugins>        
             <plugin>
