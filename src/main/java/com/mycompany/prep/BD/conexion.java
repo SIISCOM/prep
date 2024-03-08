@@ -21,7 +21,9 @@ public class conexion {
      public Connection conexion;
     public Statement sentencia;
     public ResultSet resultado;
-
+    
+    
+    
     public void ConectarBasedeDatos() throws SQLException {
         try {
             final String Controlador = "com.mysql.cj.jdbc.Driver";
