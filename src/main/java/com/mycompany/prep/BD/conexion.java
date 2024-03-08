@@ -26,8 +26,8 @@ public class conexion {
         try {
             final String Controlador = "com.mysql.cj.jdbc.Driver";
             Class.forName(Controlador);
-            final String url_bd = "jdbc:mysql://localhost:3306/prep";
-            conexion = DriverManager.getConnection(url_bd, "root", "Mun0raDr01d8");
+            final String url_bd = "jdbc:mysql://192.168.0.37:3306/prep";
+            conexion = DriverManager.getConnection(url_bd, "remoto", "123456789");
         } catch (ClassNotFoundException | SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error ", JOptionPane.ERROR_MESSAGE);
         }
